@@ -19,7 +19,8 @@ interface ModernPDFViewerProps {
 
 export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }: ModernPDFViewerProps) {
     const [numPages, setNumPages] = useState<number>(0);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false); // Controls the logical "ready" state
+    const [showLoader, setShowLoader] = useState(true); // Controls the visual presence of loader
     const [containerWidth, setContainerWidth] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,18 +40,32 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
 
     function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
         setNumPages(numPages);
-        // Delay hiding the loader to ensure canvas is painted and avoid white flash
-        setTimeout(() => {
-            setIsLoaded(true);
-            if (onLoad) onLoad(true);
-        }, 1500);
+    }
+
+    // Called when the FIRST page is fully painted on current view
+    function onPageRenderSuccess() {
+        if (!isLoaded) {
+            // Add a small buffer to ensure visual stability
+            setTimeout(() => {
+                setIsLoaded(true);
+                if (onLoad) onLoad(true);
+
+                // Start fading out
+                setTimeout(() => {
+                    setShowLoader(false);
+                }, 500); // Wait for transition duration
+            }, 500);
+        }
     }
 
     return (
         <div className="w-full flex flex-col items-center bg-paper min-h-screen relative" ref={containerRef}>
 
-            {!isLoaded && (
-                <div className="fixed inset-0 z-[50] flex flex-col items-center justify-center bg-paper text-plum">
+            {/* LOADER - Always present in DOM until fading is done, changing opacity */}
+            {showLoader && (
+                <div
+                    className={`fixed inset-0 z-[50] flex flex-col items-center justify-center bg-paper text-plum transition-opacity duration-700 ease-in-out ${isLoaded ? 'opacity-0' : 'opacity-100'}`}
+                >
                     <div className="absolute inset-0 opacity-20 pointer-events-none"
                         style={{
                             backgroundImage: 'radial-gradient(#7A2D3E 1px, transparent 1px)',
@@ -68,11 +83,9 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
             <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
-                loading={
-                    <div className="text-plum p-10 font-vibes text-xl">Cargando documento...</div>
-                }
+                loading={null} // We handle loading with our custom overlay
                 error={
-                    <div className="text-red-500 p-10 font-bold bg-white rounded shadow font-playfair">
+                    <div className="text-red-500 p-10 font-bold bg-white rounded shadow font-playfair relative z-[60]">
                         Error al cargar el PDF. Por favor recarga la página.
                     </div>
                 }
@@ -86,6 +99,8 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
                             renderTextLayer={false}
                             renderAnnotationLayer={false}
                             className="bg-white"
+                            // Only trigger success on the first page to dissolve loader
+                            onRenderSuccess={index === 0 ? onPageRenderSuccess : undefined}
                         />
 
                         {/* Interactive Buttons on Last Page */}
