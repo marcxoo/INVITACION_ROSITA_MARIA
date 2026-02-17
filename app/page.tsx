@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 // Use query param for legacy reset action? or just the dashboard
@@ -17,6 +17,17 @@ import RsvpModal from './components/RsvpModal';
 export default function Home() {
   const [isRsvpOpen, setRsvpOpen] = useState(false);
   const [invitationLoaded, setInvitationLoaded] = useState(false);
+  const [eventSlug, setEventSlug] = useState('invitacion-rosita-maria'); // Default
+
+  useEffect(() => {
+    // Check domain for "arelys"
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname.includes('arelys')) {
+        setEventSlug('invitacion-arelys');
+      }
+    }
+  }, []);
 
   // MANEJADOR DEL TIMER: Ajusta estos valores para moverlo
   const timerConfig = {
@@ -69,6 +80,7 @@ export default function Home() {
       <RsvpModal
         isOpen={isRsvpOpen}
         onClose={() => setRsvpOpen(false)}
+        eventSlug={eventSlug}
       />
 
     </main>

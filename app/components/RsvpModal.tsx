@@ -9,9 +9,10 @@ interface RsvpModalProps {
     isOpen: boolean;
     onClose: () => void;
     prefilledName?: string;
+    eventSlug: string;
 }
 
-export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalProps) {
+export default function RsvpModal({ isOpen, onClose, prefilledName, eventSlug }: RsvpModalProps) {
     // Initialize state lazily from localStorage to avoid flicker
     const [step, setStep] = useState<'form' | 'success' | 'alreadyResponded'>(() => {
         if (typeof window !== 'undefined') {
@@ -111,7 +112,7 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                 confirmed_count: attending ? count : 0,
                 status: attending ? 'confirmed' : 'declined',
                 is_public: true,
-                event_slug: 'rosita-maria'
+                event_slug: eventSlug
             };
 
             if (invitationId) {

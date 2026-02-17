@@ -62,6 +62,7 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
                 isOpen={isRsvpOpen}
                 onClose={() => setRsvpOpen(false)}
                 prefilledName={guestName}
+                eventSlug={`invitacion-${resolvedParams.slug}`}
             />
         </main>
     );
