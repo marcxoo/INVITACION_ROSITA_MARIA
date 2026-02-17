@@ -62,7 +62,7 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
     // Callback for download progress
     function onDocumentLoadProgress({ loaded, total }: { loaded: number; total: number }) {
         if (total > 0) {
-            const percent = Math.round((loaded / total) * 100);
+            const percent = Math.min(100, Math.round((loaded / total) * 100)); // Ensure it never goes above 100
             setLoadingProgress(percent);
         }
     }
@@ -83,7 +83,7 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
                     />
                     <div className="relative z-10 flex flex-col items-center w-full max-w-xs px-6">
                         <div className="w-16 h-16 border-4 border-baby-pink border-t-plum rounded-full animate-spin mb-6"></div>
-                        <div className="text-4xl font-bold font-vibes animate-pulse">Cargando Invitación...</div>
+                        <div className="text-3xl sm:text-4xl font-bold font-vibes animate-pulse whitespace-nowrap">Cargando Invitación...</div>
 
                         {/* PROGRESS BAR */}
                         <div className="w-full h-2 bg-gray-200 rounded-full mt-6 overflow-hidden border border-plum/10">
