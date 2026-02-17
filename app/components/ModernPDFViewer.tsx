@@ -19,10 +19,22 @@ const documentOptions = {
 
 import CountdownTimer from './CountdownTimer';
 
+interface ButtonPosition {
+    top: string;
+    left: string;
+    width: string;
+    height: string;
+}
+
 interface TimerConfig {
     page: number;
     top: string;
     left: string;
+}
+
+interface ButtonsConfig {
+    map: ButtonPosition;
+    rsvp: ButtonPosition;
 }
 
 interface ModernPDFViewerProps {
@@ -31,9 +43,10 @@ interface ModernPDFViewerProps {
     onOpenMap: () => void;
     onLoad?: (loaded: boolean) => void;
     timerConfig?: TimerConfig;
+    buttonsConfig?: ButtonsConfig;
 }
 
-export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, timerConfig }: ModernPDFViewerProps) {
+export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, timerConfig, buttonsConfig }: ModernPDFViewerProps) {
     const [numPages, setNumPages] = useState<number>(0);
     const [isLoaded, setIsLoaded] = useState(false); // Controls the logical "ready" state
     const [showLoader, setShowLoader] = useState(true); // Controls the visual presence of loader
@@ -127,7 +140,7 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, t
                 className="shadow-2xl"
             >
                 {Array.from(new Array(numPages), (el, index) => (
-                    <div key={`page_${index + 1}`} className="relative">
+                    <div key={`page_${index + 1}`} className="relative group/page">
                         <Page
                             pageNumber={index + 1}
                             width={containerWidth ? Math.min(containerWidth, 800) : undefined}
@@ -140,12 +153,14 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, t
                             onRenderSuccess={index === 0 ? onPageRenderSuccess : undefined}
                         />
 
-                        {/* TIMER ON SPECIFIED PAGE */}
-                        {index + 1 === (timerConfig?.page || 2) && isLoaded && (
+
+
+                        {/* TIMER */}
+                        {index + 1 === (timerConfig?.page || 1) && isLoaded && (
                             <div
-                                className="absolute z-20 pointer-events-none w-full"
+                                className="absolute z-[40] pointer-events-none w-full"
                                 style={{
-                                    top: timerConfig?.top || '74.5%', // Positioned below address
+                                    top: timerConfig?.top || '60%',
                                     left: timerConfig?.left || '50%',
                                     transform: 'translateX(-50%)',
                                 }}
@@ -154,18 +169,18 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, t
                             </div>
                         )}
 
-                        {/* Interactive Buttons on Last Page */}
+                        {/* BUTTONS */}
                         {index + 1 === numPages && isLoaded && (
                             <>
                                 {/* MAP BUTTON */}
                                 <div
                                     onClick={onOpenMap}
-                                    className="absolute cursor-pointer z-20 rounded-full hover:bg-black/5 transition-colors"
+                                    className="absolute cursor-pointer z-40 rounded-full hover:bg-black/5 transition-colors border-2 border-transparent hover:border-plum/20"
                                     style={{
-                                        top: '70.069%',
-                                        left: '12.180%',
-                                        width: '38.704%',
-                                        height: '7.913%',
+                                        top: buttonsConfig?.map.top || '70.069%',
+                                        left: buttonsConfig?.map.left || '12.180%',
+                                        width: buttonsConfig?.map.width || '38.704%',
+                                        height: buttonsConfig?.map.height || '7.913%',
                                     }}
                                     title="Ver Mapa"
                                 />
@@ -173,12 +188,12 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, t
                                 {/* RSVP BUTTON */}
                                 <div
                                     onClick={onOpenRsvp}
-                                    className="absolute cursor-pointer z-20 rounded-full hover:bg-black/5 transition-colors"
+                                    className="absolute cursor-pointer z-40 rounded-full hover:bg-black/5 transition-colors border-2 border-transparent hover:border-plum/20"
                                     style={{
-                                        top: '78.336%',
-                                        left: '46.086%',
-                                        width: '39.439%',
-                                        height: '8.130%',
+                                        top: buttonsConfig?.rsvp.top || '78.336%',
+                                        left: buttonsConfig?.rsvp.left || '46.086%',
+                                        width: buttonsConfig?.rsvp.width || '39.439%',
+                                        height: buttonsConfig?.rsvp.height || '8.130%',
                                     }}
                                     title="Confirmar Asistencia"
                                 />
@@ -187,8 +202,6 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, t
                     </div>
                 ))}
             </Document>
-
-            {/* Background decoration removed */}
         </div>
     );
 }

@@ -20,9 +20,25 @@ export default function Home() {
 
   // MANEJADOR DEL TIMER: Ajusta estos valores para moverlo
   const timerConfig = {
-    page: 1,        // Probamos con página 1 primero
-    top: '60%',     // Posición aproximada debajo de la dirección en una página larga
-    left: '50%',    // Centrado horizontal
+    page: 1,
+    top: '60%',     // Timer en su lugar original
+    left: '50%',
+  };
+
+  // MANEJADOR DE BOTONES: Ajusta posición y tamaño de las áreas de clic
+  const buttonsConfig = {
+    map: {
+      top: '71.2%',
+      left: '12.180%',
+      width: '38.704%',
+      height: '7.913%',
+    },
+    rsvp: {
+      top: '79%',
+      left: '46.086%',
+      width: '39.439%',
+      height: '8.130%',
+    }
   };
 
   const handleOpenMap = () => {
@@ -46,6 +62,7 @@ export default function Home() {
           onOpenMap={handleOpenMap}
           onLoad={() => setInvitationLoaded(true)}
           timerConfig={timerConfig}
+          buttonsConfig={buttonsConfig}
         />
       </div>
 
