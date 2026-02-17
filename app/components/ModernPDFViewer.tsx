@@ -21,6 +21,7 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
     const [numPages, setNumPages] = useState<number>(0);
     const [isLoaded, setIsLoaded] = useState(false); // Controls the logical "ready" state
     const [showLoader, setShowLoader] = useState(true); // Controls the visual presence of loader
+    const [loadingProgress, setLoadingProgress] = useState(0);
     const [containerWidth, setContainerWidth] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -58,6 +59,14 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
         }
     }
 
+    // Callback for download progress
+    function onDocumentLoadProgress({ loaded, total }: { loaded: number; total: number }) {
+        if (total > 0) {
+            const percent = Math.round((loaded / total) * 100);
+            setLoadingProgress(percent);
+        }
+    }
+
     return (
         <div className="w-full flex flex-col items-center bg-paper min-h-screen relative" ref={containerRef}>
 
@@ -72,10 +81,18 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
                             backgroundSize: '20px 20px'
                         }}
                     />
-                    <div className="relative z-10 flex flex-col items-center">
+                    <div className="relative z-10 flex flex-col items-center w-full max-w-xs px-6">
                         <div className="w-16 h-16 border-4 border-baby-pink border-t-plum rounded-full animate-spin mb-6"></div>
                         <div className="text-4xl font-bold font-vibes animate-pulse">Cargando Invitación...</div>
-                        <p className="mt-2 text-md font-playfair opacity-80">Preparando todos los detalles</p>
+
+                        {/* PROGRESS BAR */}
+                        <div className="w-full h-2 bg-gray-200 rounded-full mt-6 overflow-hidden border border-plum/10">
+                            <div
+                                className="h-full bg-plum transition-all duration-300 ease-out"
+                                style={{ width: `${loadingProgress}%` }}
+                            />
+                        </div>
+                        <p className="mt-2 text-sm font-playfair opacity-80">{loadingProgress}% completado</p>
                     </div>
                 </div>
             )}
@@ -83,6 +100,7 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
             <Document
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
+                onLoadProgress={onDocumentLoadProgress}
                 loading={null} // We handle loading with our custom overlay
                 error={
                     <div className="text-red-500 p-10 font-bold bg-white rounded shadow font-playfair relative z-[60]">
