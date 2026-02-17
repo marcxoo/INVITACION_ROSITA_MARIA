@@ -39,8 +39,11 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
 
     function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
         setNumPages(numPages);
-        setIsLoaded(true);
-        if (onLoad) onLoad(true);
+        // Delay hiding the loader to ensure canvas is painted and avoid white flash
+        setTimeout(() => {
+            setIsLoaded(true);
+            if (onLoad) onLoad(true);
+        }, 1500);
     }
 
     return (
