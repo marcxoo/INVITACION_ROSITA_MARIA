@@ -63,7 +63,7 @@ export default function AdminDashboard({ params }: { params: Promise<{ slug: str
     }
 
     async function handleDeleteAll() {
-        // if (prompt("ADMIN PASSWORD:") !== "rositamaria") return alert("Incorrecto");
+        if (prompt("ADMIN PASSWORD:") !== "rositamaria") return alert("Incorrecto");
         if (!confirm(`¿Estás seguro de borrar SOLO los datos de ${resolvedParams.slug}?`)) return;
 
         // Delete only this event's records
