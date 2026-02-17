@@ -54,7 +54,7 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
 
             <div className="w-full max-w-4xl relative z-10 my-4 md:my-10 px-0 md:px-4">
                 <LegacyPDFViewer
-                    file="/invitation.pdf"
+                    file="/rosita_maria_invitacion.pdf"
                     onOpenRsvp={() => setRsvpOpen(true)}
                     onOpenMap={handleOpenMap}
                 />

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Invitación - Baby Mini Mouse",
+  title: "Invitación - Rosita María",
   description: "¡Te invitamos a celebrar!",
 };
 

@@ -37,7 +37,7 @@ export default function Home() {
 
       <div className="w-full max-w-4xl relative z-10 p-0">
         <LegacyPDFViewer
-          file="/invitation.pdf"
+          file="/rosita_maria_invitacion.pdf"
           onOpenRsvp={() => setRsvpOpen(true)}
           onOpenMap={handleOpenMap}
           onLoad={() => setInvitationLoaded(true)}
