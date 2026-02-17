@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 // The legacy code checked URL params for reset. We can handle that if needed, 
 // but usually that is for the admin/user debugging.
 
-const LegacyPDFViewer = dynamic(() => import('./components/LegacyPDFViewer'), {
+const ModernPDFViewer = dynamic(() => import('./components/ModernPDFViewer'), {
   ssr: false,
 });
 
@@ -19,11 +19,11 @@ export default function Home() {
   const [invitationLoaded, setInvitationLoaded] = useState(false);
 
   const handleOpenMap = () => {
-    window.open('https://maps.app.goo.gl/8VHARbVpgyjSV1a36', '_blank');
+    window.open('https://maps.app.goo.gl/HkMxbZPHgzZ3cjfL6', '_blank');
   };
 
   return (
-    <main className="min-h-screen bg-[#fddbe6] flex flex-col items-center pb-0 relative overflow-x-hidden">
+    <main className="min-h-screen bg-paper flex flex-col items-center pb-0 relative overflow-x-hidden">
 
       {/* BACKGROUND DECORATION */}
       <div className="absolute inset-0 pointer-events-none opacity-10"
@@ -36,8 +36,8 @@ export default function Home() {
       {/* Legacy had a loader with logo. Typescript doesn't need strict loader if we render fast. */}
 
       <div className="w-full max-w-4xl relative z-10 p-0">
-        <LegacyPDFViewer
-          file="/rosita_maria_invitacion.pdf"
+        <ModernPDFViewer
+          file="/rosita_maria_invitacion_compressed.pdf"
           onOpenRsvp={() => setRsvpOpen(true)}
           onOpenMap={handleOpenMap}
           onLoad={() => setInvitationLoaded(true)}

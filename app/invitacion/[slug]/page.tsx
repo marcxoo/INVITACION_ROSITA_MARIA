@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import AudioPlayer from '@/app/components/AudioPlayer';
 import RsvpModal from '@/app/components/RsvpModal';
 
-const LegacyPDFViewer = dynamic(() => import('@/app/components/LegacyPDFViewer'), {
+const ModernPDFViewer = dynamic(() => import('@/app/components/ModernPDFViewer'), {
     ssr: false,
 });
 
@@ -46,15 +46,13 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
     return (
         <main className="min-h-screen bg-paper flex flex-col items-center pb-20 relative overflow-x-hidden">
             {/* BACKGROUND DECORATION */}
-            <div className="absolute inset-0 pointer-events-none opacity-10"
-                style={{ backgroundImage: 'radial-gradient(#FFD1DC 2px, transparent 2px)', backgroundSize: '30px 30px' }}
-            />
+            {/* BACKGROUND DECORATION REMOVED */}
 
-            <AudioPlayer />
+            {/* <AudioPlayer /> */}
 
             <div className="w-full max-w-4xl relative z-10 my-4 md:my-10 px-0 md:px-4">
-                <LegacyPDFViewer
-                    file="/rosita_maria_invitacion.pdf"
+                <ModernPDFViewer
+                    file="/rosita_maria_invitacion_compressed.pdf"
                     onOpenRsvp={() => setRsvpOpen(true)}
                     onOpenMap={handleOpenMap}
                 />

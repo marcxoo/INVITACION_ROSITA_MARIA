@@ -110,7 +110,8 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                 guest_limit: count,
                 confirmed_count: attending ? count : 0,
                 status: attending ? 'confirmed' : 'declined',
-                is_public: true
+                is_public: true,
+                event_slug: 'rosita-maria'
             };
 
             if (invitationId) {
@@ -172,22 +173,14 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                         initial={{ scale: 0.9, y: 20 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.9, y: 20 }}
-                        className="bg-[#fddbe6] border-2 border-[#f578aa] rounded-[30px] w-full max-w-md p-8 relative shadow-[0_20px_50px_rgba(245,120,170,0.3)] overflow-hidden"
-                        style={{ fontFamily: '"Fredoka", sans-serif' }}
+                        className="bg-paper border-2 border-gold rounded-[30px] w-full max-w-md p-8 relative shadow-2xl overflow-hidden font-playfair"
                     >
-                        {/* POLKA DOT OVERLAY */}
-                        <div
-                            className="absolute inset-0 opacity-20 pointer-events-none"
-                            style={{
-                                backgroundImage: 'radial-gradient(white 3px, transparent 3px)',
-                                backgroundSize: '24px 24px'
-                            }}
-                        />
+                        {/* POLKA DOT OVERLAY REMOVED */}
 
                         {/* CLOSE BUTTON */}
                         <button
                             onClick={onClose}
-                            className="absolute top-5 right-5 text-[#ff4a77] hover:scale-110 transition-transform z-20"
+                            className="absolute top-5 right-5 text-plum hover:scale-110 transition-transform z-20"
                         >
                             <X size={28} strokeWidth={3} />
                         </button>
@@ -195,15 +188,15 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                         {step === 'form' ? (
                             <div className="space-y-6 relative z-10">
                                 <div className="text-center">
-                                    <h2 className="text-[#ff4a77] text-4xl font-bold mb-1">¡Celebremos a Arelys!</h2>
-                                    <p className="text-[#f578aa] opacity-90 text-lg">Acompáñanos a festejar sus 3 añitos este Sábado 28 de Febrero.</p>
+                                    <h2 className="text-plum text-5xl font-bold mb-2 font-vibes">¡Celebremos a Rosita!</h2>
+                                    <p className="text-plum opacity-90 text-lg">Acompáñanos a festejar este día especial.</p>
                                 </div>
 
                                 <div className="space-y-5">
                                     {/* NAME INPUT */}
                                     <div className="space-y-2">
-                                        <label className="flex items-center gap-2 text-[#ff4a77] font-semibold text-lg">
-                                            <User size={20} />
+                                        <label className="flex items-center gap-2 text-plum font-semibold text-lg">
+                                            <User size={20} className="text-gold" />
                                             Nombre o Familia
                                         </label>
                                         <input
@@ -211,27 +204,27 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
                                             placeholder="Ej. Familia Pérez"
-                                            className="w-full p-4 border-2 border-[#f578aa]/30 rounded-2xl focus:border-[#ff4a77] outline-none bg-white/80 text-[#ff4a77] text-lg font-medium transition-all"
+                                            className="w-full p-4 border-2 border-baby-pink rounded-2xl focus:border-plum outline-none bg-white text-plum text-lg font-medium transition-all"
                                         />
                                     </div>
 
                                     {/* COUNT INPUT */}
                                     <div className="space-y-2">
-                                        <label className="flex items-center gap-2 text-[#ff4a77] font-semibold text-lg">
-                                            <Users size={20} />
+                                        <label className="flex items-center gap-2 text-plum font-semibold text-lg">
+                                            <Users size={20} className="text-gold" />
                                             ¿Cuántos vendrán?
                                         </label>
-                                        <div className="flex items-center gap-6 bg-white/50 p-2 rounded-2xl w-fit border-2 border-[#f578aa]/20">
+                                        <div className="flex items-center gap-6 bg-white p-2 rounded-2xl w-fit border-2 border-baby-pink">
                                             <button
                                                 onClick={() => setCount(Math.max(1, count - 1))}
-                                                className="w-12 h-12 rounded-xl bg-white text-[#ff4a77] shadow-sm hover:shadow-md active:scale-95 transition-all text-2xl font-bold flex items-center justify-center border border-[#f578aa]/20"
+                                                className="w-12 h-12 rounded-xl bg-paper text-plum shadow-sm hover:shadow-md active:scale-95 transition-all text-2xl font-bold flex items-center justify-center border border-baby-pink"
                                             >
                                                 -
                                             </button>
-                                            <span className="text-3xl font-bold text-[#ff4a77] min-w-[30px] text-center">{count}</span>
+                                            <span className="text-3xl font-bold text-plum min-w-[30px] text-center font-vibes">{count}</span>
                                             <button
                                                 onClick={() => setCount(Math.max(1, count + 1))}
-                                                className="w-12 h-12 rounded-xl bg-[#ff4a77] text-white shadow-sm hover:shadow-md active:scale-95 transition-all text-2xl font-bold flex items-center justify-center"
+                                                className="w-12 h-12 rounded-xl bg-plum text-white shadow-sm hover:shadow-md active:scale-95 transition-all text-2xl font-bold flex items-center justify-center"
                                             >
                                                 +
                                             </button>
@@ -245,14 +238,14 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                                     <button
                                         onClick={() => handleSubmit(false)}
                                         disabled={loading}
-                                        className="py-4 px-4 bg-white text-[#f578aa] border-2 border-[#f578aa] rounded-2xl hover:bg-red-50 font-bold transition-all disabled:opacity-50 text-base"
+                                        className="py-4 px-4 bg-white text-plum border-2 border-plum/20 rounded-2xl hover:bg-gray-50 font-bold transition-all disabled:opacity-50 text-base"
                                     >
                                         No podré ir
                                     </button>
                                     <button
                                         onClick={() => handleSubmit(true)}
                                         disabled={loading}
-                                        className="py-4 px-4 bg-[#ff4a77] text-white rounded-2xl shadow-[0_8px_0_#d13b61] active:shadow-none active:translate-y-[8px] font-bold transition-all disabled:opacity-50 text-base"
+                                        className="py-4 px-4 bg-plum text-white rounded-2xl shadow-lg active:shadow-none active:translate-y-[2px] font-bold transition-all disabled:opacity-50 text-base"
                                     >
                                         {loading ? 'Enviando...' : (invitationId ? 'Actualizar' : '¡Sí, asistiré!')}
                                     </button>
@@ -263,21 +256,21 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                                 <motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="w-24 h-24 bg-white text-[#ff4a77] rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-[#ff4a77]/20"
+                                    className="w-24 h-24 bg-white text-gold rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-gold/20"
                                 >
                                     <Check size={50} strokeWidth={3} />
                                 </motion.div>
                                 <div className="space-y-2">
-                                    <h2 className="text-[#ff4a77] text-3xl font-bold">¡Ya respondiste!</h2>
-                                    <p className="text-[#f578aa] text-lg font-medium">
+                                    <h2 className="text-plum text-4xl font-bold font-vibes">¡Ya respondiste!</h2>
+                                    <p className="text-plum text-lg font-medium">
                                         Hemos guardado tu respuesta como <br />
-                                        <span className="font-bold text-[#ff4a77]">"{name}"</span>
+                                        <span className="font-bold text-plum">"{name}"</span>
                                     </p>
                                 </div>
                                 <div className="space-y-3">
                                     <button
                                         onClick={onClose}
-                                        className="w-full py-3 px-6 bg-[#ff4a77] text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                        className="w-full py-3 px-6 bg-plum text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-lg"
                                     >
                                         Entendido, Cerrar
                                     </button>
@@ -285,13 +278,13 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => setStep('form')}
-                                            className="flex-1 py-3 px-2 bg-transparent text-[#f578aa] border-2 border-[#f578aa]/30 rounded-2xl font-bold hover:bg-[#f578aa]/10 transition-all text-sm"
+                                            className="flex-1 py-3 px-2 bg-transparent text-plum border-2 border-plum/30 rounded-2xl font-bold hover:bg-plum/5 transition-all text-sm"
                                         >
                                             Corregir mi respuesta
                                         </button>
                                         <button
                                             onClick={handleNewRegistration}
-                                            className="flex-1 py-3 px-2 bg-transparent text-[#ff4a77] border-2 border-[#ff4a77]/30 rounded-2xl font-bold hover:bg-[#ff4a77]/10 transition-all text-sm"
+                                            className="flex-1 py-3 px-2 bg-transparent text-plum border-2 border-plum/30 rounded-2xl font-bold hover:bg-plum/5 transition-all text-sm"
                                         >
                                             Registrar a otra persona
                                         </button>
@@ -303,20 +296,20 @@ export default function RsvpModal({ isOpen, onClose, prefilledName }: RsvpModalP
                                 <motion.div
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="w-24 h-24 bg-white text-[#ff4a77] rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-[#ff4a77]/20"
+                                    className="w-24 h-24 bg-white text-gold rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-gold/20"
                                 >
                                     <Check size={50} strokeWidth={3} />
                                 </motion.div>
                                 <div className="space-y-2">
-                                    <h2 className="text-[#ff4a77] text-4xl font-bold">¡Genial!</h2>
-                                    <p className="text-[#f578aa] text-xl font-medium">
+                                    <h2 className="text-plum text-5xl font-bold font-vibes">¡Genial!</h2>
+                                    <p className="text-plum text-xl font-medium">
                                         ¡Gracias por confirmar!<br />
-                                        Arelys te espera para celebrar juntos sus 3 añitos.
+                                        Te esperamos para celebrar juntos.
                                     </p>
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="py-3 px-10 bg-[#ff4a77] text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-lg"
+                                    className="py-3 px-10 bg-plum text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-lg"
                                 >
                                     Cerrar
                                 </button>
