@@ -7,7 +7,22 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 // Configure PDF worker
 if (typeof window !== 'undefined') {
-    pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+}
+
+// Optimization options for the PDF document
+const documentOptions = {
+    cMapUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/cmaps/`,
+    cMapPacked: true,
+    standardFontDataUrl: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/standard_fonts/`,
+};
+
+import CountdownTimer from './CountdownTimer';
+
+interface TimerConfig {
+    page: number;
+    top: string;
+    left: string;
 }
 
 interface ModernPDFViewerProps {
@@ -15,9 +30,10 @@ interface ModernPDFViewerProps {
     onOpenRsvp: () => void;
     onOpenMap: () => void;
     onLoad?: (loaded: boolean) => void;
+    timerConfig?: TimerConfig;
 }
 
-export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }: ModernPDFViewerProps) {
+export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad, timerConfig }: ModernPDFViewerProps) {
     const [numPages, setNumPages] = useState<number>(0);
     const [isLoaded, setIsLoaded] = useState(false); // Controls the logical "ready" state
     const [showLoader, setShowLoader] = useState(true); // Controls the visual presence of loader
@@ -101,7 +117,8 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
                 file={file}
                 onLoadSuccess={onDocumentLoadSuccess}
                 onLoadProgress={onDocumentLoadProgress}
-                loading={null} // We handle loading with our custom overlay
+                options={documentOptions}
+                loading={null}
                 error={
                     <div className="text-red-500 p-10 font-bold bg-white rounded shadow font-playfair relative z-[60]">
                         Error al cargar el PDF. Por favor recarga la página.
@@ -117,9 +134,25 @@ export default function ModernPDFViewer({ file, onOpenRsvp, onOpenMap, onLoad }:
                             renderTextLayer={false}
                             renderAnnotationLayer={false}
                             className="bg-white"
+                            // Optimize rendering: lower DPR on mobile for speed
+                            devicePixelRatio={typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1}
                             // Only trigger success on the first page to dissolve loader
                             onRenderSuccess={index === 0 ? onPageRenderSuccess : undefined}
                         />
+
+                        {/* TIMER ON SPECIFIED PAGE */}
+                        {index + 1 === (timerConfig?.page || 2) && isLoaded && (
+                            <div
+                                className="absolute z-20 pointer-events-none w-full"
+                                style={{
+                                    top: timerConfig?.top || '74.5%', // Positioned below address
+                                    left: timerConfig?.left || '50%',
+                                    transform: 'translateX(-50%)',
+                                }}
+                            >
+                                <CountdownTimer />
+                            </div>
+                        )}
 
                         {/* Interactive Buttons on Last Page */}
                         {index + 1 === numPages && isLoaded && (

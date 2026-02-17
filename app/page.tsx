@@ -18,6 +18,13 @@ export default function Home() {
   const [isRsvpOpen, setRsvpOpen] = useState(false);
   const [invitationLoaded, setInvitationLoaded] = useState(false);
 
+  // MANEJADOR DEL TIMER: Ajusta estos valores para moverlo
+  const timerConfig = {
+    page: 1,        // Probamos con página 1 primero
+    top: '60%',     // Posición aproximada debajo de la dirección en una página larga
+    left: '50%',    // Centrado horizontal
+  };
+
   const handleOpenMap = () => {
     window.open('https://maps.app.goo.gl/HkMxbZPHgzZ3cjfL6', '_blank');
   };
@@ -32,15 +39,13 @@ export default function Home() {
 
       {invitationLoaded && <AudioPlayer />}
 
-      {/* LOGO LOADER STYLE HEADER (Optional, or just the PDF) */}
-      {/* Legacy had a loader with logo. Typescript doesn't need strict loader if we render fast. */}
-
       <div className="w-full max-w-4xl relative z-10 p-0">
         <ModernPDFViewer
           file="/rosita_maria_invitacion_compressed.pdf"
           onOpenRsvp={() => setRsvpOpen(true)}
           onOpenMap={handleOpenMap}
           onLoad={() => setInvitationLoaded(true)}
+          timerConfig={timerConfig}
         />
       </div>
 

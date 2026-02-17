@@ -20,6 +20,9 @@ const config: Config = {
             fontFamily: {
                 vibes: ["var(--font-vibes)"],
                 playfair: ["var(--font-playfair)"],
+                cinzel: ["var(--font-cinzel)"],
+                cormorant: ["var(--font-cormorant)"],
+                bodoni: ["var(--font-bodoni)"],
             },
         },
     },
