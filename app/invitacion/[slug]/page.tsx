@@ -52,7 +52,7 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
 
             <div className="w-full max-w-4xl relative z-10 my-4 md:my-10 px-0 md:px-4">
                 <ModernPDFViewer
-                    file="/rosita_maria_invitacion_compressed.pdf"
+                    file="/rosita_maria_invitacion_compressed.pdf?v=65"
                     onOpenRsvp={() => setRsvpOpen(true)}
                     onOpenMap={handleOpenMap}
                 />
