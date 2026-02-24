@@ -1,35 +1,65 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function AudioPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isScrolling, setIsScrolling] = useState(false);
-    const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
     const constraintsRef = useRef(null);
 
+    // Initial autoplay attempt
+    useEffect(() => {
+        const attemptAutoplay = async () => {
+            try {
+                if (audioRef.current) {
+                    await audioRef.current.play();
+                    setIsPlaying(true);
+                }
+            } catch (err) {
+                console.log("Autoplay blocked. Waiting for user interaction.");
+            }
+        };
+
+        // Delay slightly to ensure component is settled
+        const timeout = setTimeout(attemptAutoplay, 300);
+        return () => clearTimeout(timeout);
+    }, []);
+
     const togglePlay = () => {
+        if (!audioRef.current) return;
+
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play();
+        }
         setIsPlaying(!isPlaying);
     };
 
     // Scroll detection logic
-    useState(() => {
-        if (typeof window !== 'undefined') {
-            let timeout: NodeJS.Timeout;
-            const handleScroll = () => {
-                setIsScrolling(true);
-                clearTimeout(timeout);
-                timeout = setTimeout(() => setIsScrolling(false), 1000);
-            };
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            return () => {
-                window.removeEventListener('scroll', handleScroll);
-                clearTimeout(timeout);
-            };
-        }
-    });
+    useEffect(() => {
+        let timeout: NodeJS.Timeout;
+        const handleScroll = () => {
+            setIsScrolling(true);
+            clearTimeout(timeout);
+            timeout = setTimeout(() => setIsScrolling(false), 1000);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(timeout);
+        };
+    }, []);
 
     return (
         <>
+            <audio
+                ref={audioRef}
+                src="/metadata.mp3"
+                loop
+                preload="auto"
+            />
+
             {/* Constraints container - invisible and non-blocking */}
             <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-[190]" />
 
@@ -45,7 +75,7 @@ export default function AudioPlayer() {
                     scale: isScrolling ? 0.85 : 1
                 }}
                 whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, opacity: { duration: 0.5 } }}
             >
                 <button
                     onClick={togglePlay}
@@ -53,8 +83,8 @@ export default function AudioPlayer() {
                     relative w-14 h-14 rounded-full border-2 border-white/20
                     flex items-center justify-center overflow-hidden
                     shadow-[0_4px_14px_rgba(122,45,62,0.4)]
-                    transition-colors duration-300
-                    bg-plum
+                    transition-all duration-300
+                    ${isPlaying ? 'bg-plum' : 'bg-gray-400'}
                 `}
                 >
                     {/* PATTERN BACKGROUND */}

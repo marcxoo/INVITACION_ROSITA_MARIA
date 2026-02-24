@@ -17,6 +17,8 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
     const [isRsvpOpen, setRsvpOpen] = useState(false);
     const [guestName, setGuestName] = useState('');
 
+    const [invitationLoaded, setInvitationLoaded] = useState(false);
+
     useEffect(() => {
         checkSlug();
     }, [resolvedParams.slug]);
@@ -48,13 +50,14 @@ export default function InvitationPage({ params }: { params: Promise<{ slug: str
             {/* BACKGROUND DECORATION */}
             {/* BACKGROUND DECORATION REMOVED */}
 
-            {/* <AudioPlayer /> */}
+            {invitationLoaded && <AudioPlayer />}
 
             <div className="w-full max-w-4xl relative z-10 my-4 md:my-10 px-0 md:px-4">
                 <ModernPDFViewer
-                    file="/rosita_maria_invitacion_compressed.pdf?v=66"
+                    file="/rosita_maria_invitacion_compressed.pdf?v=67"
                     onOpenRsvp={() => setRsvpOpen(true)}
                     onOpenMap={handleOpenMap}
+                    onLoad={() => setInvitationLoaded(true)}
                 />
             </div>
 
