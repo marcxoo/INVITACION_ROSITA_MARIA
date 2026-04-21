@@ -26,12 +26,12 @@ async function run() {
     }
 
     // 2. Realizar una inserción pequeña para generar actividad de escritura
-    // Usamos un slug especial 'keep-alive' para identificar estos registros
+    // Usamos un slug especial 'invitacion-keep-alive' para identificar estos registros
     const { error: insertError } = await supabase
         .from('invitations')
         .insert([{ 
             family_name: 'Mantenimiento Automático (Anti-Pausa)', 
-            event_slug: 'keep-alive', 
+            event_slug: 'invitacion-keep-alive', 
             status: 'confirmed', 
             confirmed_count: 0 
         }]);
@@ -47,7 +47,7 @@ async function run() {
     const { error: deleteError } = await supabase
         .from('invitations')
         .delete()
-        .eq('event_slug', 'keep-alive')
+        .eq('event_slug', 'invitacion-keep-alive')
         .lt('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
 
     if (deleteError) {
