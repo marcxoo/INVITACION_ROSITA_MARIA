@@ -68,7 +68,7 @@ export default function Home() {
 
       <div className="w-full max-w-4xl relative z-10 p-0">
         <ModernPDFViewer
-          file="/rosita_maria_invitacion_compressed.pdf?v=67"
+          file="/rosita_maria_invitacion_compressed.pdf?v=68"
           onOpenRsvp={() => setRsvpOpen(true)}
           onOpenMap={handleOpenMap}
           onLoad={() => setInvitationLoaded(true)}
